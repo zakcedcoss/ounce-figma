@@ -27,6 +27,7 @@ function Profiling() {
   const [isFilterApplied, setIsFilterApplied] = useState(false);
 
   useEffect(() => {
+    // we can keep the token in env variables
     fetch(
       `https://multi-account.sellernext.com/home/public/connector/product/getRefineProducts?activePage=${page}&count=${count}&productOnly=true${filterQuery}`,
       {
