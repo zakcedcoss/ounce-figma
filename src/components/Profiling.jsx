@@ -95,18 +95,19 @@ function Profiling() {
   const removeFilter = (key) => {
     const { [key]: _, ...rest } = filterObject;
     console.log(rest);
-    setFilterObject(rest);
 
     const newQuery = createQuery(rest);
     console.log(newQuery);
-    setPage(1);
-    setFilterQuery(newQuery);
-    setIsFilterApplied(true);
 
     if (Object.keys(rest).length === 0) {
       setFilterQuery("");
       setIsFilterApplied(false);
     }
+
+    setPage(1);
+    setFilterObject(rest);
+    setFilterQuery(newQuery);
+    setIsFilterApplied(true);
   };
 
   return (
@@ -125,10 +126,10 @@ function Profiling() {
           <Card>
             <FlexLayout spacing="extraloose" halign="fill">
               <TextStyles type="Heading">Product List</TextStyles>
-              <div>
+              <FlexLayout spacing="loose">
                 <Button type="Primary">Sync With Twitter</Button>
                 <Button type="Outlined">Import From Shopify</Button>
-              </div>
+              </FlexLayout>
             </FlexLayout>
           </Card>
 
