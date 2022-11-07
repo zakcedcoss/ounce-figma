@@ -27,7 +27,7 @@ function Profiling() {
   const [isFilterApplied, setIsFilterApplied] = useState(false);
 
   useEffect(() => {
-    // we can keep the token in env variables
+    // we can keep the token in env variable
     fetch(
       `https://multi-account.sellernext.com/home/public/connector/product/getRefineProducts?activePage=${page}&count=${count}&productOnly=true${filterQuery}`,
       {
@@ -134,7 +134,7 @@ function Profiling() {
             </FlexLayout>
           </Card>
 
-          {isFilterApplied && Object.keys(filterObject).length !== 0 && (
+          {Object.keys(filterObject).length !== 0 && (
             <Card>
               <FlexLayout spacing="loose">
                 {Object.keys(filterObject)?.map((key, i) => {
@@ -144,7 +144,6 @@ function Profiling() {
                       key={i}
                       destroy={() => {
                         removeFilter(key);
-                        handleApply();
                       }}
                     >
                       {splitKey[0]}
