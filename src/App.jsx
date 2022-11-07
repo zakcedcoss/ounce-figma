@@ -1,12 +1,18 @@
 import "./App.css";
-import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
+import { Routes, Route } from "react-router-dom";
+import Profiling from "./components/Profiling";
+import Dashboard from "./components/Dashboard";
 import Home from "./pages/Home";
-Chart.register(ArcElement, Tooltip, Legend);
 
 function App() {
   return (
     <div className="App">
-      <Home />
+      <Routes>
+        <Route path="/" element={<Home />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profiling" element={<Profiling />} />
+        </Route>
+      </Routes>
     </div>
   );
 }

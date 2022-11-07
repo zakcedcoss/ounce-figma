@@ -13,6 +13,8 @@ import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
 Chart.register(ArcElement, Tooltip, Legend);
 
 function Dashboard() {
+  // eslint-disable-next-line
+
   const lineOptions = {
     responsive: true,
     // plugins: {
@@ -39,7 +41,7 @@ function Dashboard() {
     datasets: [
       {
         label: "Dataset 1",
-        data: [300, 50, 100, 50, 300, 50, 100, 50],
+        data: [125, 85, 100, 90, 125, 75, 100, 80],
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
