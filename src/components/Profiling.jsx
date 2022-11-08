@@ -25,7 +25,8 @@ function Profiling() {
   const [filterObject, setFilterObject] = useState({});
   const [filterQuery, setFilterQuery] = useState("");
   const [tagsArray, setTagsArray] = useState([]);
-  // use this array to add or delete filter fields
+
+  // use the "filterField" array to add or delete filter fields
   // "name" key is the name you want to show above input field
   // "filter" key contains query with number seperated by "-" (dash)
   const filterFields = [
