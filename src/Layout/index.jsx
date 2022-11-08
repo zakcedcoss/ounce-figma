@@ -1,10 +1,9 @@
 import { Topbar, Button, FlexLayout, NewSidebar } from "@cedcommerce/ounce-ui";
-import { AiOutlineDown } from "react-icons/ai";
+import { AiOutlineDown, AiOutlineSetting } from "react-icons/ai";
 import { FiBell, FiBox } from "react-icons/fi";
 import { BiUser } from "react-icons/bi";
 import { BsHouseDoor } from "react-icons/bs";
 import { CgTemplate } from "react-icons/cg";
-import { AiOutlineSetting } from "react-icons/ai";
 import { FaRegHandshake } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 

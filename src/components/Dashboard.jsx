@@ -137,7 +137,8 @@ function Dashboard() {
           </Card>
         </div>
         <PageFooter>
-          <TextStyles>Cedcommerce @ 2020</TextStyles>
+          <TextStyles>Cedcommerce @ 2022</TextStyles>
+          <TextStyles>Coded by Zeeshan</TextStyles>
         </PageFooter>
       </BodyLayout>
     </div>
