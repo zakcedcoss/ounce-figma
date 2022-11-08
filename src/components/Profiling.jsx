@@ -72,6 +72,8 @@ function Profiling() {
       .catch((err) => console.log(err));
   }, [page, count, filterQuery]);
 
+  // use this function to create query from the "filterObject" object
+  // "filterObject" object *MUST* be in same manner as it is in this code
   function createQuery(queryObject) {
     let query = "";
 
