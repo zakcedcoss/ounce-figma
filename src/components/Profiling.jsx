@@ -24,7 +24,15 @@ function Profiling() {
   // filters
   const [filterObject, setFilterObject] = useState({});
   const [filterQuery, setFilterQuery] = useState("");
-  const [isFilterApplied, setIsFilterApplied] = useState(false);
+  const [tagsArray, setTagsArray] = useState([]);
+  // use this array to add or delete filter fields
+  // "name" key is the name you want to show above input field
+  // "filter" key contains query with number seperated by "-" (dash)
+  const filterFields = [
+    { name: "Product Name", filter: "title-3" },
+    { name: "SKU", filter: "items.sku-3" },
+    { name: "Status", filter: "items.status-1" },
+  ];
 
   useEffect(() => {
     // we can keep the token in env variable
@@ -36,7 +44,7 @@ function Profiling() {
             "eyJzaG9waWZ5Ijoic2hvcGlmeV90d2l0dGVyIiwibWFnZW50byI6Im1hZ2VudG9fdHdpdHRlciIsImJpZ2NvbW1lcmNlIjoiYmlnY29tbWVyY2VfdHdpdHRlciIsIndvb2NvbW1lcmNlIjoid29vY29tbWVyY2VfdHdpdHRlciIsInR3aXR0ZXIiOiJ0d2l0dGVyIn0=",
           appTag: "twitter_ads",
           Authorization:
-            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjM2MzcyZDgxODZlNjUzOWVkMDU5NmMyIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNjY3ODMxMjc4LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYzNjhkZGFlMzVmNTU1NDYzYjRhNjkwMiJ9.OSktME4OdVv9lbiOnYFM5ZO-C3mft3bbrCYaGclv6thgKO30iIjk86Q-pWwetmT88EgHuLZ_xqWYHfc4ytJHsU5dGLnQcEgNzYgMvKOpSx0SA_joMYUGEVRIL-X1iy4KefIBLddBmKVeMsiU79lpouGxpgRvRFt-XNSSx_IvVtM2hdGPW4acnnGSXdDXSlhIcT8KUMhWYguJyXp6RTfZppvTyHW_2F4M8rugSlZtZRegFj3St8kic3s3vVb6ecm2MoOh_pA6G3RbdXNyZrJo_8zdp790AgYSVjMbzbuOHg4NNraDu8emGFxsF6GfvO9mXrEeL7ERE8X9CNF4Hk3o_w",
+            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjM2MzcyZDgxODZlNjUzOWVkMDU5NmMyIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNjY3ODk4MTUzLCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYzNjllMmU5OTk0MjYyNDE3NTZjMzg4MiJ9.JK44yy7dlyp7ay4QH5m7xWhPN1EREH7wP-49KAyGkncvq3STmPf16xLWNVPGGf3IADqZYXpqy_gLT6rC2XP2lTF2gZpd148nwY42gmcv96H-XMCKClwC-mc1_i_ITtllHssT2ge2bCLxWJSL6MgLeh81KwhPgLyAExrWzVvJlkDcUsPvQCCV9IO5F11egqZ8lNnjSnp-vYdJ2o2NPg-gSCrX2M_5Zc7maCEOJgEhinYMjVaQ8swVyTb1YAbbJdviqPB3KQ9lZVdbQ-Tx3r8g1S2YRUFBEvcwzlWSZvnMncgv7Ul4_FAB0wxFo52kTrj9eLnUmWDIUjeFJtHB_pDO6A",
           "Ced-Source-Id": 889,
           "Ced-Source-Name": "shopify",
           "Ced-Target-Id": 890,
@@ -77,15 +85,23 @@ function Profiling() {
     return query;
   }
 
-  const handleChange = (value, name) => {
-    setFilterObject({ ...filterObject, [name]: value });
+  console.log(filterObject);
+
+  const handleChange = (value, field) => {
+    setFilterObject({ ...filterObject, [field.filter]: value });
   };
 
   const handleApply = () => {
     const newQuery = createQuery(filterObject);
     setPage(1);
     setFilterQuery(newQuery);
-    setIsFilterApplied(true);
+
+    const tags = Object.keys(filterObject).filter(
+      (key) => filterObject[key] !== ""
+    );
+
+    console.log(tags);
+    setTagsArray(tags);
   };
 
   const handleResetFilter = () => {
@@ -98,17 +114,18 @@ function Profiling() {
     console.log(rest);
 
     const newQuery = createQuery(rest);
-    console.log(newQuery);
+    console.log(key);
+
+    const newTags = tagsArray.filter((tag) => tag !== key);
 
     if (Object.keys(rest).length === 0) {
       setFilterQuery("");
-      setIsFilterApplied(false);
     }
 
     setPage(1);
     setFilterObject(rest);
     setFilterQuery(newQuery);
-    setIsFilterApplied(true);
+    setTagsArray(newTags);
   };
 
   return (
@@ -134,11 +151,11 @@ function Profiling() {
             </FlexLayout>
           </Card>
 
-          {Object.keys(filterObject).length !== 0 && (
+          {tagsArray.length !== 0 && (
             <Card>
               <FlexLayout spacing="loose">
-                {Object.keys(filterObject)?.map((key, i) => {
-                  const splitKey = key.split("-");
+                {tagsArray.map((key, i) => {
+                  const splitKey = key.split("-")[0].split(".");
                   return (
                     <Tag
                       key={i}
@@ -146,7 +163,7 @@ function Profiling() {
                         removeFilter(key);
                       }}
                     >
-                      {splitKey[0]}
+                      {splitKey[1] || splitKey[0]}
                     </Tag>
                   );
                 })}
@@ -180,52 +197,23 @@ function Profiling() {
                 <Filter
                   button="Filter"
                   icon={<FiFilter />}
-                  filters={[
-                    {
+                  filters={filterFields.map((field) => {
+                    const { filter, name } = field;
+                    return {
                       children: (
                         <>
                           <FormElement>
                             <TextField
-                              id="title"
-                              value={filterObject["title-3"] || ""}
-                              onChange={(e) => handleChange(e, "title-3")}
+                              id={filter}
+                              value={filterObject[field.filter] || ""}
+                              onChange={(e) => handleChange(e, field)}
                             />
                           </FormElement>
                         </>
                       ),
-                      name: "Product Name",
-                    },
-                    {
-                      children: (
-                        <>
-                          <FormElement>
-                            <TextField
-                              id="items.sku"
-                              value={filterObject["items.sku-3"] || ""}
-                              onChange={(e) => handleChange(e, "items.sku-3")}
-                            />
-                          </FormElement>
-                        </>
-                      ),
-                      name: "SKU",
-                    },
-                    {
-                      children: (
-                        <>
-                          <FormElement>
-                            <TextField
-                              id="items.status"
-                              value={filterObject["items.status-1"] || ""}
-                              onChange={(e) =>
-                                handleChange(e, "items.status-1")
-                              }
-                            />
-                          </FormElement>
-                        </>
-                      ),
-                      name: "Status",
-                    },
-                  ]}
+                      name,
+                    };
+                  })}
                   heading="Filter By"
                   type="Outlined"
                   onApply={handleApply}
@@ -361,8 +349,8 @@ function Profiling() {
                 }}
                 onNext={() => setPage((prevPage) => prevPage + 1)}
                 onPrevious={() => {
-                  if (page <= 0) {
-                    setPage(0);
+                  if (page <= 1) {
+                    setPage(1);
                     return;
                   }
                   setPage((prevPage) => prevPage - 1);
