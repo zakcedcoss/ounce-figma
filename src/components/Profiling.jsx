@@ -17,6 +17,7 @@ import {
 } from "@cedcommerce/ounce-ui";
 import { FiFilter } from "react-icons/fi";
 import { useState, useEffect } from "react";
+import { Table } from "antd";
 
 function Profiling() {
   const [page, setPage] = useState(1);
@@ -24,6 +25,7 @@ function Profiling() {
   const [totalCount, setTotalCount] = useState(1);
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedRow, setSelectedRow] = useState([]);
   // filters
   const [filterObject, setFilterObject] = useState({});
   const [filterQuery, setFilterQuery] = useState("");
@@ -85,6 +87,14 @@ function Profiling() {
         setIsLoading(false);
       })
       .catch((err) => console.log(err));
+
+    const checkBox = JSON.parse(localStorage.getItem("checkBox"));
+
+    if (checkBox) {
+      setSelectedRow(checkBox[page]);
+      return;
+    }
+    setSelectedRow([]);
   }, [page, count, filterQuery]);
 
   useEffect(() => {
@@ -105,8 +115,11 @@ function Profiling() {
       }
     )
       .then((resp) => resp.json())
-      .then((data) => setTotalCount(data.data.count));
+      .then((data) => setTotalCount(data.data.count))
+      .catch((err) => console.log(err));
   }, []);
+
+  // console.log(selectedRow);
 
   // use this function to create query from the "filterObject" object
   // "filterObject" object *MUST* be in same manner as it is in this code
@@ -348,7 +361,7 @@ function Profiling() {
           </Card>
           <Card>
             {!isLoading && products?.length !== 0 ? (
-              <Grid
+              <Table
                 columns={[
                   {
                     align: "left",
@@ -380,9 +393,18 @@ function Profiling() {
                   },
                 ]}
                 dataSource={products}
+                pagination={false}
                 rowSelection={{
+                  selectedRowKeys: selectedRow,
                   onChange: (e) => {
-                    console.log(e);
+                    setSelectedRow(e);
+                    const checkBox = JSON.parse(
+                      localStorage.getItem("checkBox")
+                    );
+                    localStorage.setItem(
+                      "checkBox",
+                      JSON.stringify({ ...checkBox, [page]: e })
+                    );
                   },
                 }}
               />
