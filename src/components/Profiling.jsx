@@ -35,7 +35,7 @@ function Profiling() {
   ];
 
   useEffect(() => {
-    // we can keep the token in env variable
+    // we can keep the token in env variable for more security
     fetch(
       `https://multi-account.sellernext.com/home/public/connector/product/getRefineProducts?activePage=${page}&count=${count}&productOnly=true${filterQuery}`,
       {
@@ -100,7 +100,6 @@ function Profiling() {
       (key) => filterObject[key] !== ""
     );
 
-    console.log(tags);
     setTagsArray(tags);
   };
 
@@ -111,10 +110,8 @@ function Profiling() {
 
   const removeFilter = (key) => {
     const { [key]: _, ...rest } = filterObject;
-    console.log(rest);
 
     const newQuery = createQuery(rest);
-    console.log(key);
 
     const newTags = tagsArray.filter((tag) => tag !== key);
 
