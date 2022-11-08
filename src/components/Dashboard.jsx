@@ -138,7 +138,7 @@ function Dashboard() {
         </div>
         <PageFooter>
           <TextStyles>Cedcommerce @ 2022</TextStyles>
-          <TextStyles>Coded by Zeeshan</TextStyles>
+          <TextStyles>Coded by Zeeshan A. Khan</TextStyles>
         </PageFooter>
       </BodyLayout>
     </div>
