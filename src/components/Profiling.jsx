@@ -10,6 +10,7 @@ import {
   Filter,
   Grid,
   Tag,
+  Skeleton,
   ButtonDropdown,
   FormElement,
   Pagination,
@@ -20,7 +21,9 @@ import { useState, useEffect } from "react";
 function Profiling() {
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(10);
+  const [totalCount, setTotalCount] = useState(1);
   const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   // filters
   const [filterObject, setFilterObject] = useState({});
   const [filterQuery, setFilterQuery] = useState("");
@@ -30,13 +33,15 @@ function Profiling() {
   // "name" key is the name you want to show above input field
   // "filter" key contains query with number seperated by "-" (dash)
   const filterFields = [
-    { name: "Product Name", filter: "title-3" },
-    { name: "SKU", filter: "items.sku-3" },
-    { name: "Status", filter: "items.status-1" },
+    { name: "Product Status", filter: "item.status-1" },
+    { name: "Brand", filter: "brand-1" },
+    { name: "Product Type", filter: "product_type-3" },
+    { name: "Template", filter: "profile.profile_name-1" },
   ];
 
   useEffect(() => {
     // we can keep the token in env variable for more security
+    setIsLoading(true);
     fetch(
       `https://multi-account.sellernext.com/home/public/connector/product/getRefineProducts?activePage=${page}&count=${count}&productOnly=true${filterQuery}`,
       {
@@ -45,7 +50,7 @@ function Profiling() {
             "eyJzaG9waWZ5Ijoic2hvcGlmeV90d2l0dGVyIiwibWFnZW50byI6Im1hZ2VudG9fdHdpdHRlciIsImJpZ2NvbW1lcmNlIjoiYmlnY29tbWVyY2VfdHdpdHRlciIsIndvb2NvbW1lcmNlIjoid29vY29tbWVyY2VfdHdpdHRlciIsInR3aXR0ZXIiOiJ0d2l0dGVyIn0=",
           appTag: "twitter_ads",
           Authorization:
-            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjM2MzcyZDgxODZlNjUzOWVkMDU5NmMyIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNjY3ODk4MTUzLCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYzNjllMmU5OTk0MjYyNDE3NTZjMzg4MiJ9.JK44yy7dlyp7ay4QH5m7xWhPN1EREH7wP-49KAyGkncvq3STmPf16xLWNVPGGf3IADqZYXpqy_gLT6rC2XP2lTF2gZpd148nwY42gmcv96H-XMCKClwC-mc1_i_ITtllHssT2ge2bCLxWJSL6MgLeh81KwhPgLyAExrWzVvJlkDcUsPvQCCV9IO5F11egqZ8lNnjSnp-vYdJ2o2NPg-gSCrX2M_5Zc7maCEOJgEhinYMjVaQ8swVyTb1YAbbJdviqPB3KQ9lZVdbQ-Tx3r8g1S2YRUFBEvcwzlWSZvnMncgv7Ul4_FAB0wxFo52kTrj9eLnUmWDIUjeFJtHB_pDO6A",
+            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjM2MzcyZDgxODZlNjUzOWVkMDU5NmMyIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNjY3OTEyNTM0LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYzNmExYjE2NmJhYTQ4MDZjYjQ5Y2Y5MyJ9.FnMJH6BvUsR20TxoTARH8klijVxaR87mxn7rWuSZ1BxObszltUq91QxfpmDOzM3uORNdIFypAazf-kvDFcEcDqmzDKQyNWZgz8mWhMVn_n5qnTMvMmYIMO-A4t2cmSF2INK_yHBDh_GCtj5cCIGyiM6SYeBdz6YMxblk461FKxH8S2Cxll-kTalueEnKB5IlVltSznHO4pGsJ_otGnBpKBRPdzhrKKNmO9uVsQ2BV-bPlEKRY9KAHep9kNVe5E1zenVhUtC-EEsT9wRzsmQF2XKb0NvDgeja9aedV39BljdMEquHq9a-JW_QwR7tYRokxt-9XEc05ZTLKlMZ64FpOw",
           "Ced-Source-Id": 889,
           "Ced-Source-Name": "shopify",
           "Ced-Target-Id": 890,
@@ -55,22 +60,53 @@ function Profiling() {
     )
       .then((resp) => resp.json())
       .then((allData) => {
+        // console.log(allData);
         let newData = allData?.data?.rows?.map((item) => {
           return {
             key: item._id["$oid"],
             name: item.title,
-            sku: item.items[0].sku,
+            sku:
+              item["source_product_id"] === item.items[0]["source_product_id"]
+                ? item.items[0].sku
+                : "NA",
             status: item.items[0].status,
-            inventory:
-              item.items[0].quantity === 0
-                ? "Out of Stock"
-                : item.items[0].quantity,
+            inventory: `${item.items.reduce((acc, val) => {
+              if (item["source_product_id"] === val["source_product_id"])
+                return acc + 0;
+              return acc + val.quantity;
+            }, 0)} in ${item.items.reduce((acc, val) => {
+              if (item["source_product_id"] === val["source_product_id"])
+                return acc + 0;
+              return acc + 1;
+            }, 0)} variant`,
           };
         });
         setProducts(newData);
+        setIsLoading(false);
       })
       .catch((err) => console.log(err));
   }, [page, count, filterQuery]);
+
+  useEffect(() => {
+    fetch(
+      `https://multi-account.sellernext.com/home/public/connector/product/getProductsCount?activePage=1&count=10&productOnly=true&target_marketplace=eyJtYXJrZXRwbGFjZSI6ImFsbCIsInNob3BfaWQiOm51bGx9`,
+      {
+        headers: {
+          appCode:
+            "eyJzaG9waWZ5Ijoic2hvcGlmeV90d2l0dGVyIiwibWFnZW50byI6Im1hZ2VudG9fdHdpdHRlciIsImJpZ2NvbW1lcmNlIjoiYmlnY29tbWVyY2VfdHdpdHRlciIsIndvb2NvbW1lcmNlIjoid29vY29tbWVyY2VfdHdpdHRlciIsInR3aXR0ZXIiOiJ0d2l0dGVyIn0=",
+          appTag: "twitter_ads",
+          Authorization:
+            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjM2MzcyZDgxODZlNjUzOWVkMDU5NmMyIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNjY3OTEyNTM0LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYzNmExYjE2NmJhYTQ4MDZjYjQ5Y2Y5MyJ9.FnMJH6BvUsR20TxoTARH8klijVxaR87mxn7rWuSZ1BxObszltUq91QxfpmDOzM3uORNdIFypAazf-kvDFcEcDqmzDKQyNWZgz8mWhMVn_n5qnTMvMmYIMO-A4t2cmSF2INK_yHBDh_GCtj5cCIGyiM6SYeBdz6YMxblk461FKxH8S2Cxll-kTalueEnKB5IlVltSznHO4pGsJ_otGnBpKBRPdzhrKKNmO9uVsQ2BV-bPlEKRY9KAHep9kNVe5E1zenVhUtC-EEsT9wRzsmQF2XKb0NvDgeja9aedV39BljdMEquHq9a-JW_QwR7tYRokxt-9XEc05ZTLKlMZ64FpOw",
+          "Ced-Source-Id": 889,
+          "Ced-Source-Name": "shopify",
+          "Ced-Target-Id": 890,
+          "Ced-Target-Name": "twitter",
+        },
+      }
+    )
+      .then((resp) => resp.json())
+      .then((data) => setTotalCount(data.data.count));
+  }, []);
 
   // use this function to create query from the "filterObject" object
   // "filterObject" object *MUST* be in same manner as it is in this code
@@ -79,9 +115,13 @@ function Profiling() {
 
     if (Object.keys(queryObject).length > 0) {
       Object.keys(queryObject)?.forEach((key) => {
-        const splitKey = key.split("-");
-
-        query += `&filter[${splitKey[0]}][${splitKey[1]}]=${queryObject[key]}`;
+        if (key === "title or sku") {
+          if (queryObject[key] === "") return;
+          query += `&or_filter[title][3]=${queryObject[key]}&or_filter[items.sku][3]=${queryObject[key]}`;
+        } else {
+          const splitKey = key.split("-");
+          query += `&filter[${splitKey[0]}][${splitKey[1]}]=${queryObject[key]}`;
+        }
       });
     }
 
@@ -107,6 +147,7 @@ function Profiling() {
   const handleResetFilter = () => {
     setFilterObject({});
     setFilterQuery("");
+    setTagsArray([]);
   };
 
   const removeFilter = (key) => {
@@ -124,6 +165,10 @@ function Profiling() {
     setFilterObject(rest);
     setFilterQuery(newQuery);
     setTagsArray(newTags);
+  };
+
+  const handleSearchChange = (value) => {
+    setFilterObject({ ...filterObject, "title or sku": value });
   };
 
   return (
@@ -171,25 +216,30 @@ function Profiling() {
 
           <Card>
             <FlexLayout halign="fill">
-              <TextField
-                placeHolder="Search Products"
-                prefix={
-                  <svg
-                    fill="none"
-                    height="20"
-                    stroke="#c3c3c3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                    width="20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle cx="11" cy="11" r="8" />
-                    <line x1="21" x2="16.65" y1="21" y2="16.65" />
-                  </svg>
-                }
-              />
+              <FormElement>
+                <TextField
+                  value={filterObject["title or sku"] || ""}
+                  placeHolder="Search By Title or SKU"
+                  prefix={
+                    <svg
+                      fill="none"
+                      height="20"
+                      stroke="#c3c3c3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                      width="20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle cx="11" cy="11" r="8" />
+                      <line x1="21" x2="16.65" y1="21" y2="16.65" />
+                    </svg>
+                  }
+                  onChange={(e) => handleSearchChange(e)}
+                  onEnter={handleApply}
+                />
+              </FormElement>
 
               <FlexLayout halign="fill" spacing="loose">
                 <Filter
@@ -297,55 +347,68 @@ function Profiling() {
             </FlexLayout>
           </Card>
           <Card>
-            <Grid
-              columns={[
-                {
-                  align: "left",
-                  dataIndex: "name",
-                  key: "name",
-                  title: " Product Name",
-                  width: 500,
-                },
-                {
-                  align: "left",
-                  dataIndex: "sku",
-                  key: "sku",
-                  title: "SKU",
-                  width: 100,
-                },
-                {
-                  align: "center",
-                  dataIndex: "status",
-                  key: "status",
-                  title: "Status",
-                  width: 100,
-                },
-                {
-                  align: "center",
-                  dataIndex: "inventory",
-                  key: "inventory",
-                  title: "Inventory",
-                  width: 100,
-                },
-              ]}
-              dataSource={products}
-              rowSelection={{
-                onChange: (e) => {
-                  console.log(e);
-                },
-              }}
-            />
+            {!isLoading && products?.length !== 0 ? (
+              <Grid
+                columns={[
+                  {
+                    align: "left",
+                    dataIndex: "name",
+                    key: "name",
+                    title: " Product Name",
+                    width: 500,
+                  },
+                  {
+                    align: "left",
+                    dataIndex: "sku",
+                    key: "sku",
+                    title: "SKU",
+                    width: 100,
+                  },
+                  {
+                    align: "center",
+                    dataIndex: "status",
+                    key: "status",
+                    title: "Status",
+                    width: 100,
+                  },
+                  {
+                    align: "center",
+                    dataIndex: "inventory",
+                    key: "inventory",
+                    title: "Inventory",
+                    width: 200,
+                  },
+                ]}
+                dataSource={products}
+                rowSelection={{
+                  onChange: (e) => {
+                    console.log(e);
+                  },
+                }}
+              />
+            ) : (
+              <Skeleton line={3} rounded="0%" type="line" />
+            )}
           </Card>
-          {products.length !== 0 && (
+          {products?.length !== 0 && (
             <Card>
               <Pagination
                 countPerPage={count}
                 currentPage={page}
-                onCountChange={(e) => setCount(e)}
+                onCountChange={(e) => {
+                  setCount(e);
+                  setPage(1);
+                }}
                 onEnter={(e) => {
                   if (e > 0) setPage(e);
                 }}
-                onNext={() => setPage((prevPage) => prevPage + 1)}
+                onNext={() => {
+                  if (page >= Math.ceil(totalCount / count)) {
+                    setPage(Math.ceil(totalCount / count));
+                    return;
+                  }
+                  setPage((prevPage) => prevPage + 1);
+                }}
                 onPrevious={() => {
                   if (page <= 1) {
                     setPage(1);
@@ -371,8 +434,8 @@ function Profiling() {
                     value: "100",
                   },
                 ]}
-                totalPages={20}
-                totalitem={200}
+                totalPages={Math.ceil(totalCount / count)}
+                totalitem={totalCount}
               />
             </Card>
           )}
