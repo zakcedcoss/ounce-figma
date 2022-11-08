@@ -85,8 +85,6 @@ function Profiling() {
     return query;
   }
 
-  console.log(filterObject);
-
   const handleChange = (value, field) => {
     setFilterObject({ ...filterObject, [field.filter]: value });
   };
