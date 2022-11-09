@@ -63,7 +63,7 @@ function Profiling() {
     )
       .then((resp) => resp.json())
       .then((allData) => {
-        console.log(allData);
+        // console.log(allData);
         let newData = allData?.data?.rows?.map((item) => {
           return {
             key: item._id["$oid"],
@@ -119,8 +119,6 @@ function Profiling() {
       .then((data) => setTotalCount(data.data?.count))
       .catch((err) => console.log(err));
   }, []);
-
-  // console.log(selectedRow);
 
   // use this function to create query from the "filterObject" object
   // "filterObject" object *MUST* be in same manner as it is in this code
