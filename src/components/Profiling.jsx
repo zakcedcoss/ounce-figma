@@ -152,7 +152,7 @@ function Profiling() {
     )
       .then((resp) => resp.json())
       .then((allData) => {
-        // console.log(allData);
+        console.log(allData);
         let newData = allData?.data?.rows?.map((item) => {
           return {
             key: item._id["$oid"],
@@ -161,16 +161,19 @@ function Profiling() {
               item["source_product_id"] === item.items[0]["source_product_id"]
                 ? item.items[0].sku
                 : "NA",
-            status: item.items[0].status,
-            inventory: `${item.items.reduce((acc, val) => {
-              if (item["source_product_id"] === val["source_product_id"])
-                return acc + 0;
-              return acc + val.quantity;
-            }, 0)} in ${item.items.reduce((acc, val) => {
-              if (item["source_product_id"] === val["source_product_id"])
-                return acc + 0;
-              return acc + 1;
-            }, 0)} variant`,
+            status: item.items[0]?.status || item.items[1]?.status,
+            inventory:
+              item.type === "simple"
+                ? item.items[0].quantity
+                : `${item.items.reduce((acc, val) => {
+                    if (item["source_product_id"] === val["source_product_id"])
+                      return acc + 0;
+                    return acc + val.quantity;
+                  }, 0)} in ${item.items.reduce((acc, val) => {
+                    if (item["source_product_id"] === val["source_product_id"])
+                      return acc + 0;
+                    return acc + 1;
+                  }, 0)} variant`,
             img: item["main_image"],
           };
         });
@@ -187,6 +190,8 @@ function Profiling() {
     }
     setSelectedRow([]);
   }, [page, count, filterQuery]);
+
+  console.log(products);
 
   useEffect(() => {
     fetch(
@@ -280,7 +285,7 @@ function Profiling() {
 
     setTagsArray(modifiedTags);
   };
-  console.log(tagsArray);
+  // console.log(tagsArray);
   const handleResetFilter = () => {
     setFilterObject({});
     setFilterQuery("");
