@@ -129,7 +129,6 @@ function Profiling() {
   // token
   const TOKEN =
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjM2MzcyZDgxODZlNjUzOWVkMDU5NmMyIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNjY3OTk3OTkwLCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYzNmI2OGU2M2Y5YzFjNGQ1MjNkZWZiNyJ9.HwRomSL5l7Unk4p9v2WyyehcEIJgg5INoqR4s8h274CGK6P-jn4xx8voltraaDgq43QIzxP-f8GLUhk1ru4mCyxw8ItZ_7AtLgp-ykdNQjSBQb21V5Otyc7bKOirYbl_3QP8PjGfYWnAuVl7Yu5h66vdXQWVnPXUchBC_GxN1JaVS_vD1t6NFJQstfMfEr_MgyAm5YYH1EU4eksq4jumCR2aPpsF2ml8JiPxWcDRrDcpAZTjvjoxeeJwhyVUj2arE5v52FXTQ_34GZ4TTSmiV97Sh3pF5DdRhyJKZDEOc77TMBJOqt1HXUxnwasudkwkvyLZP7TWIIFe3D7KlMVIiA";
-  // console.log(filterObject);
 
   useEffect(() => {
     // we can keep the token in env variable for more security
@@ -211,33 +210,6 @@ function Profiling() {
       .then((resp) => resp.json())
       .then((data) => setTotalCount(data.data?.count))
       .catch((err) => console.log(err));
-
-    // fetch(
-    //   "https://multi-account.sellernext.com/home/public/connector/source/getFilterAttributes",
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       appCode:
-    //         "eyJzaG9waWZ5Ijoic2hvcGlmeV90d2l0dGVyIiwibWFnZW50byI6Im1hZ2VudG9fdHdpdHRlciIsImJpZ2NvbW1lcmNlIjoiYmlnY29tbWVyY2VfdHdpdHRlciIsIndvb2NvbW1lcmNlIjoid29vY29tbWVyY2VfdHdpdHRlciIsInR3aXR0ZXIiOiJ0d2l0dGVyIn0=",
-    //       appTag: "twitter_ads",
-    //       Authorization: `Bearer ${TOKEN}`,
-    //       "Ced-Source-Id": 889,
-    //       "Ced-Source-Name": "shopify",
-    //       "Ced-Target-Id": 890,
-    //       "Ced-Target-Name": "twitter",
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       source: {
-    //         shopId: 889,
-    //         marketplace: "shopify",
-    //       },
-    //     }),
-    //   }
-    // )
-    //   .then((resp) => resp.json())
-    //   .then(console.log)
-    //   .catch((err) => console.log(err));
   }, []);
 
   // use this function to create query from the "filterObject" object
@@ -268,7 +240,7 @@ function Profiling() {
     setPage(1);
     setFilterQuery(newQuery);
 
-    const tags = Object.keys(filterObject)?.filter((key) => {
+    const tags = Object.keys(filterObject).filter((key) => {
       return filterObject[key] !== "";
     });
 
@@ -284,7 +256,7 @@ function Profiling() {
 
     setTagsArray(modifiedTags);
   };
-  // console.log(tagsArray);
+
   const handleResetFilter = () => {
     setFilterObject({});
     setFilterQuery("");
