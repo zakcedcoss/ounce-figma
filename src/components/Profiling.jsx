@@ -367,7 +367,7 @@ function Profiling() {
                     dataIndex: "name",
                     key: "name",
                     title: " Product Name",
-                    render: (text, record, index) => {
+                    render: (text, record) => {
                       return (
                         <FlexLayout halign="left" spacing="loose">
                           <Avatar src={record.img} />
