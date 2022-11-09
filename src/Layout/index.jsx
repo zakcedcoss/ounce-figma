@@ -37,7 +37,6 @@ function Layout({ children }) {
         //   />
         // }
         onChange={(e) => {
-          // console.log(e);
           navigate(e.path);
         }}
         menu={[
