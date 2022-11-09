@@ -68,7 +68,7 @@ function Dashboard() {
         />
         <div
           style={{
-            marginTop: "2.5rem",
+            marginTop: "7rem",
           }}
         >
           <Card>

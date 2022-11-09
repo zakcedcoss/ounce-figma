@@ -16,7 +16,7 @@ import {
 } from "@cedcommerce/ounce-ui";
 import { FiFilter } from "react-icons/fi";
 import { useState, useEffect } from "react";
-import { Table, Avatar } from "antd";
+import { Table, Avatar, Select } from "antd";
 
 function Profiling() {
   const [page, setPage] = useState(1);
@@ -34,14 +34,102 @@ function Profiling() {
   // "name" key is the name you want to show above input field
   // "filter" key contains query with number seperated by "-" (dash)
   const filterFields = [
-    { name: "Product Status", filter: "item.status-1" },
-    { name: "Brand", filter: "brand-1" },
-    { name: "Product Type", filter: "product_type-3" },
-    { name: "Template", filter: "profile.profile_name-1" },
+    {
+      title: "Product Status",
+      filter: "item.status-1",
+      options: [
+        {
+          label: "Active",
+          value: "Active",
+        },
+        {
+          label: "Inactive",
+          value: "Inactive",
+        },
+        {
+          label: "Incomplete",
+          value: "Incomplete",
+        },
+        {
+          label: "Not Listed",
+          value: "Not_listed",
+        },
+        {
+          label: "Uploaded",
+          value: "Uploaded",
+        },
+        {
+          label: "Available for Offer",
+          value: "Available for Offer",
+        },
+      ],
+    },
+    {
+      title: "Brand",
+      filter: "brand-1",
+      options: [
+        {
+          label: "Sterling Ltd",
+          value: "Sterling Ltd",
+        },
+        {
+          label: "Home Sweet Home",
+          value: "Home Sweet Home",
+        },
+        {
+          label: "Company 123",
+          value: "Company 123",
+        },
+        {
+          label: "randomStoreCed",
+          value: "randomStoreCed",
+        },
+        {
+          label: "Rustic LTD",
+          value: "Rustic LTD",
+        },
+        {
+          label: "twitter_demo7",
+          value: "twitter_demo7",
+        },
+        {
+          label: "partners-demo",
+          value: "partners-demo",
+        },
+      ],
+    },
+    {
+      title: "Product Type",
+      filter: "product_type-3",
+      options: [
+        {
+          label: "Necklace",
+          value: "Necklace",
+        },
+        {
+          label: "Indoor",
+          value: "Indoor",
+        },
+        {
+          label: "Earrings",
+          value: "Earrings",
+        },
+        {
+          label: "Outdoor",
+          value: "Outdoor",
+        },
+        {
+          label: "Bracelet",
+          value: "Bracelet",
+        },
+      ],
+    },
   ];
   // token
   const TOKEN =
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjM2MzcyZDgxODZlNjUzOWVkMDU5NmMyIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNjY3OTgwNTI0LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYzNmIyNGFjMDgxMmZkM2I1ZjQ2NWYyNSJ9.NcfOV372emwmCCPuoQ1HRKEy7sJ1HTO70GKWoepQJP2sShdlCTCzDQr3gND3LNhwE_Naco6V1Ab_7p8aH0-0dCd_vx91kzFYbgTX7m6KcKqVNkxuwhY45VLeYl2pQ0_-mqvPLM1DcGKkSqiKZ7MGk_qrfVwZUpo4yy7wRG_foMyFSnWOHNj42ya9PGjFsxztnc24hzNKpDz6lCs6O6N_6--ue7h8_tiUwgFiV8vUr7GXtxVvDU08r3gRXtj5pNA4wDo_OsWv7YS1ZwpXf_7AdVYimqVjHtpsrLgpumL6FOyWLY8_TOsZSBKjMPGQT1URdMtoEde9Q_Z-LUqneQdx0g";
+
+  // console.log(filterObject);
 
   useEffect(() => {
     // we can keep the token in env variable for more security
@@ -90,7 +178,7 @@ function Profiling() {
       })
       .catch((err) => console.log(err));
 
-    const checkBox = JSON.parse(sessionStorage.getItem("checkBox"));
+    const checkBox = JSON.parse(localStorage.getItem("checkBox"));
 
     if (checkBox) {
       setSelectedRow(checkBox[page]);
@@ -118,6 +206,33 @@ function Profiling() {
       .then((resp) => resp.json())
       .then((data) => setTotalCount(data.data?.count))
       .catch((err) => console.log(err));
+
+    // fetch(
+    //   "https://multi-account.sellernext.com/home/public/connector/source/getFilterAttributes",
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       appCode:
+    //         "eyJzaG9waWZ5Ijoic2hvcGlmeV90d2l0dGVyIiwibWFnZW50byI6Im1hZ2VudG9fdHdpdHRlciIsImJpZ2NvbW1lcmNlIjoiYmlnY29tbWVyY2VfdHdpdHRlciIsIndvb2NvbW1lcmNlIjoid29vY29tbWVyY2VfdHdpdHRlciIsInR3aXR0ZXIiOiJ0d2l0dGVyIn0=",
+    //       appTag: "twitter_ads",
+    //       Authorization: `Bearer ${TOKEN}`,
+    //       "Ced-Source-Id": 889,
+    //       "Ced-Source-Name": "shopify",
+    //       "Ced-Target-Id": 890,
+    //       "Ced-Target-Name": "twitter",
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       source: {
+    //         shopId: 889,
+    //         marketplace: "shopify",
+    //       },
+    //     }),
+    //   }
+    // )
+    //   .then((resp) => resp.json())
+    //   .then(console.log)
+    //   .catch((err) => console.log(err));
   }, []);
 
   // use this function to create query from the "filterObject" object
@@ -139,7 +254,6 @@ function Profiling() {
 
     return query;
   }
-
   const handleChange = (value, field) => {
     setFilterObject({ ...filterObject, [field.filter]: value });
   };
@@ -149,13 +263,18 @@ function Profiling() {
     setPage(1);
     setFilterQuery(newQuery);
 
-    const tags = Object.keys(filterObject).filter(
-      (key) => filterObject[key] !== ""
-    );
+    const tags = Object.keys(filterObject).filter((key) => {
+      return filterObject[key] !== "";
+    });
 
-    setTagsArray(tags);
+    const modifiedTags = tags.map((key) => {
+      const splitKey = key.split("-")[0].split(".");
+      return [`${splitKey[1] || splitKey[0]} : ${filterObject[key]}`, key];
+    });
+
+    setTagsArray(modifiedTags);
   };
-
+  console.log(tagsArray);
   const handleResetFilter = () => {
     setFilterObject({});
     setFilterQuery("");
@@ -167,7 +286,7 @@ function Profiling() {
 
     const newQuery = createQuery(rest);
 
-    const newTags = tagsArray.filter((tag) => tag !== key);
+    const newTags = tagsArray.filter((tag) => tag[1] !== key);
 
     if (Object.keys(rest).length === 0) {
       setFilterQuery("");
@@ -209,15 +328,14 @@ function Profiling() {
             <Card>
               <FlexLayout spacing="loose">
                 {tagsArray.map((key, i) => {
-                  const splitKey = key.split("-")[0].split(".");
                   return (
                     <Tag
                       key={i}
                       destroy={() => {
-                        removeFilter(key);
+                        removeFilter(key[1]);
                       }}
                     >
-                      {splitKey[1] || splitKey[0]}
+                      {key[0]}
                     </Tag>
                   );
                 })}
@@ -256,20 +374,30 @@ function Profiling() {
                   button="Filter"
                   icon={<FiFilter />}
                   filters={filterFields.map((field) => {
-                    const { filter, name } = field;
+                    const { filter, title, options } = field;
                     return {
                       children: (
                         <>
-                          <FormElement>
-                            <TextField
-                              id={filter}
-                              value={filterObject[field.filter] || ""}
-                              onChange={(e) => handleChange(e, field)}
-                            />
-                          </FormElement>
+                          <TextField
+                            id={filter}
+                            value={filterObject[field.filter] || ""}
+                            onChange={(e) => handleChange(e, field)}
+                          />
+                          <Select
+                            placeholder={`Select ${title}`}
+                            options={options}
+                            optionFilterProp="children"
+                            value={filterObject[field.filter]}
+                            filterOption={(input, option) =>
+                              (option?.label ?? "")
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
+                            }
+                            onChange={(e) => handleChange(e, field)}
+                          />
                         </>
                       ),
-                      name,
+                      name: title,
                     };
                   })}
                   heading="Filter By"
@@ -356,6 +484,7 @@ function Profiling() {
               </FlexLayout>
             </FlexLayout>
           </Card>
+          ;{" "}
           <Card>
             {!isLoading && products?.length !== 0 ? (
               <Table
@@ -404,9 +533,9 @@ function Profiling() {
                   onChange: (e) => {
                     setSelectedRow(e);
                     const checkBox = JSON.parse(
-                      sessionStorage.getItem("checkBox")
+                      localStorage.getItem("checkBox")
                     );
-                    sessionStorage.setItem(
+                    localStorage.setItem(
                       "checkBox",
                       JSON.stringify({ ...checkBox, [page]: e })
                     );
@@ -417,7 +546,7 @@ function Profiling() {
               <Skeleton line={3} rounded="0%" type="line" />
             )}
           </Card>
-          ;
+          ; ; ;
           {products?.length !== 0 && (
             <Card>
               <Pagination
