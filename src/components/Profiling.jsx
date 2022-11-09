@@ -13,10 +13,11 @@ import {
   ButtonDropdown,
   FormElement,
   Pagination,
+  Select,
 } from "@cedcommerce/ounce-ui";
 import { FiFilter } from "react-icons/fi";
 import { useState, useEffect } from "react";
-import { Table, Avatar, Select } from "antd";
+import { Table, Avatar } from "antd";
 
 function Profiling() {
   const [page, setPage] = useState(1);
@@ -269,7 +270,12 @@ function Profiling() {
 
     const modifiedTags = tags.map((key) => {
       const splitKey = key.split("-")[0].split(".");
-      return [`${splitKey[1] || splitKey[0]} : ${filterObject[key]}`, key];
+      return [
+        `${splitKey[1]?.toUpperCase() || splitKey[0]?.toUpperCase()} : ${
+          filterObject[key]
+        }`,
+        key,
+      ];
     });
 
     setTagsArray(modifiedTags);
@@ -378,21 +384,15 @@ function Profiling() {
                     return {
                       children: (
                         <>
-                          <TextField
+                          {/* <TextField
                             id={filter}
                             value={filterObject[field.filter] || ""}
                             onChange={(e) => handleChange(e, field)}
-                          />
+                          /> */}
                           <Select
                             placeholder={`Select ${title}`}
                             options={options}
-                            optionFilterProp="children"
-                            value={filterObject[field.filter]}
-                            filterOption={(input, option) =>
-                              (option?.label ?? "")
-                                .toLowerCase()
-                                .includes(input.toLowerCase())
-                            }
+                            value={filterObject[filter]}
                             onChange={(e) => handleChange(e, field)}
                           />
                         </>
@@ -484,7 +484,6 @@ function Profiling() {
               </FlexLayout>
             </FlexLayout>
           </Card>
-          ;{" "}
           <Card>
             {!isLoading && products?.length !== 0 ? (
               <Table
