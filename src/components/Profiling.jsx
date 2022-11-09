@@ -8,7 +8,6 @@ import {
   PageHeader,
   TextField,
   Filter,
-  Grid,
   Tag,
   Skeleton,
   ButtonDropdown,
@@ -17,7 +16,7 @@ import {
 } from "@cedcommerce/ounce-ui";
 import { FiFilter } from "react-icons/fi";
 import { useState, useEffect } from "react";
-import { Table } from "antd";
+import { Table, Avatar } from "antd";
 
 function Profiling() {
   const [page, setPage] = useState(1);
@@ -40,6 +39,9 @@ function Profiling() {
     { name: "Product Type", filter: "product_type-3" },
     { name: "Template", filter: "profile.profile_name-1" },
   ];
+  // token
+  const TOKEN =
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjM2MzcyZDgxODZlNjUzOWVkMDU5NmMyIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNjY3OTgwNTI0LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYzNmIyNGFjMDgxMmZkM2I1ZjQ2NWYyNSJ9.NcfOV372emwmCCPuoQ1HRKEy7sJ1HTO70GKWoepQJP2sShdlCTCzDQr3gND3LNhwE_Naco6V1Ab_7p8aH0-0dCd_vx91kzFYbgTX7m6KcKqVNkxuwhY45VLeYl2pQ0_-mqvPLM1DcGKkSqiKZ7MGk_qrfVwZUpo4yy7wRG_foMyFSnWOHNj42ya9PGjFsxztnc24hzNKpDz6lCs6O6N_6--ue7h8_tiUwgFiV8vUr7GXtxVvDU08r3gRXtj5pNA4wDo_OsWv7YS1ZwpXf_7AdVYimqVjHtpsrLgpumL6FOyWLY8_TOsZSBKjMPGQT1URdMtoEde9Q_Z-LUqneQdx0g";
 
   useEffect(() => {
     // we can keep the token in env variable for more security
@@ -51,8 +53,7 @@ function Profiling() {
           appCode:
             "eyJzaG9waWZ5Ijoic2hvcGlmeV90d2l0dGVyIiwibWFnZW50byI6Im1hZ2VudG9fdHdpdHRlciIsImJpZ2NvbW1lcmNlIjoiYmlnY29tbWVyY2VfdHdpdHRlciIsIndvb2NvbW1lcmNlIjoid29vY29tbWVyY2VfdHdpdHRlciIsInR3aXR0ZXIiOiJ0d2l0dGVyIn0=",
           appTag: "twitter_ads",
-          Authorization:
-            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjM2MzcyZDgxODZlNjUzOWVkMDU5NmMyIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNjY3OTEyNTM0LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYzNmExYjE2NmJhYTQ4MDZjYjQ5Y2Y5MyJ9.FnMJH6BvUsR20TxoTARH8klijVxaR87mxn7rWuSZ1BxObszltUq91QxfpmDOzM3uORNdIFypAazf-kvDFcEcDqmzDKQyNWZgz8mWhMVn_n5qnTMvMmYIMO-A4t2cmSF2INK_yHBDh_GCtj5cCIGyiM6SYeBdz6YMxblk461FKxH8S2Cxll-kTalueEnKB5IlVltSznHO4pGsJ_otGnBpKBRPdzhrKKNmO9uVsQ2BV-bPlEKRY9KAHep9kNVe5E1zenVhUtC-EEsT9wRzsmQF2XKb0NvDgeja9aedV39BljdMEquHq9a-JW_QwR7tYRokxt-9XEc05ZTLKlMZ64FpOw",
+          Authorization: `Bearer ${TOKEN}`,
           "Ced-Source-Id": 889,
           "Ced-Source-Name": "shopify",
           "Ced-Target-Id": 890,
@@ -62,11 +63,11 @@ function Profiling() {
     )
       .then((resp) => resp.json())
       .then((allData) => {
-        // console.log(allData);
+        console.log(allData);
         let newData = allData?.data?.rows?.map((item) => {
           return {
             key: item._id["$oid"],
-            name: item.title,
+            name: item["title"],
             sku:
               item["source_product_id"] === item.items[0]["source_product_id"]
                 ? item.items[0].sku
@@ -81,6 +82,7 @@ function Profiling() {
                 return acc + 0;
               return acc + 1;
             }, 0)} variant`,
+            img: item["main_image"],
           };
         });
         setProducts(newData);
@@ -88,7 +90,7 @@ function Profiling() {
       })
       .catch((err) => console.log(err));
 
-    const checkBox = JSON.parse(localStorage.getItem("checkBox"));
+    const checkBox = JSON.parse(sessionStorage.getItem("checkBox"));
 
     if (checkBox) {
       setSelectedRow(checkBox[page]);
@@ -105,8 +107,7 @@ function Profiling() {
           appCode:
             "eyJzaG9waWZ5Ijoic2hvcGlmeV90d2l0dGVyIiwibWFnZW50byI6Im1hZ2VudG9fdHdpdHRlciIsImJpZ2NvbW1lcmNlIjoiYmlnY29tbWVyY2VfdHdpdHRlciIsIndvb2NvbW1lcmNlIjoid29vY29tbWVyY2VfdHdpdHRlciIsInR3aXR0ZXIiOiJ0d2l0dGVyIn0=",
           appTag: "twitter_ads",
-          Authorization:
-            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjM2MzcyZDgxODZlNjUzOWVkMDU5NmMyIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNjY3OTEyNTM0LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYzNmExYjE2NmJhYTQ4MDZjYjQ5Y2Y5MyJ9.FnMJH6BvUsR20TxoTARH8klijVxaR87mxn7rWuSZ1BxObszltUq91QxfpmDOzM3uORNdIFypAazf-kvDFcEcDqmzDKQyNWZgz8mWhMVn_n5qnTMvMmYIMO-A4t2cmSF2INK_yHBDh_GCtj5cCIGyiM6SYeBdz6YMxblk461FKxH8S2Cxll-kTalueEnKB5IlVltSznHO4pGsJ_otGnBpKBRPdzhrKKNmO9uVsQ2BV-bPlEKRY9KAHep9kNVe5E1zenVhUtC-EEsT9wRzsmQF2XKb0NvDgeja9aedV39BljdMEquHq9a-JW_QwR7tYRokxt-9XEc05ZTLKlMZ64FpOw",
+          Authorization: `Bearer ${TOKEN}`,
           "Ced-Source-Id": 889,
           "Ced-Source-Name": "shopify",
           "Ced-Target-Id": 890,
@@ -115,7 +116,7 @@ function Profiling() {
       }
     )
       .then((resp) => resp.json())
-      .then((data) => setTotalCount(data.data.count))
+      .then((data) => setTotalCount(data.data?.count))
       .catch((err) => console.log(err));
   }, []);
 
@@ -206,7 +207,6 @@ function Profiling() {
               </FlexLayout>
             </FlexLayout>
           </Card>
-
           {tagsArray.length !== 0 && (
             <Card>
               <FlexLayout spacing="loose">
@@ -226,7 +226,6 @@ function Profiling() {
               </FlexLayout>
             </Card>
           )}
-
           <Card>
             <FlexLayout halign="fill">
               <FormElement>
@@ -368,6 +367,14 @@ function Profiling() {
                     dataIndex: "name",
                     key: "name",
                     title: " Product Name",
+                    render: (text, record, index) => {
+                      return (
+                        <FlexLayout halign="left" spacing="loose">
+                          <Avatar src={record.img} />
+                          <TextStyles>{text}</TextStyles>
+                        </FlexLayout>
+                      );
+                    },
                     width: 500,
                   },
                   {
@@ -399,9 +406,9 @@ function Profiling() {
                   onChange: (e) => {
                     setSelectedRow(e);
                     const checkBox = JSON.parse(
-                      localStorage.getItem("checkBox")
+                      sessionStorage.getItem("checkBox")
                     );
-                    localStorage.setItem(
+                    sessionStorage.setItem(
                       "checkBox",
                       JSON.stringify({ ...checkBox, [page]: e })
                     );
@@ -412,6 +419,7 @@ function Profiling() {
               <Skeleton line={3} rounded="0%" type="line" />
             )}
           </Card>
+          ;
           {products?.length !== 0 && (
             <Card>
               <Pagination
@@ -420,6 +428,7 @@ function Profiling() {
                 onCountChange={(e) => {
                   setCount(e);
                   setPage(1);
+                  sessionStorage.removeItem("checkBox");
                 }}
                 onEnter={(e) => {
                   if (e > 0) setPage(e);
