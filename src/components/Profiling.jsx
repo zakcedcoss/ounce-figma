@@ -193,7 +193,7 @@ function Profiling() {
         />
         <div
           style={{
-            marginTop: "3rem",
+            marginTop: "7rem",
           }}
         >
           <Card>
