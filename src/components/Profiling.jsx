@@ -128,8 +128,7 @@ function Profiling() {
   ];
   // token
   const TOKEN =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjM2MzcyZDgxODZlNjUzOWVkMDU5NmMyIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNjY3OTgwNTI0LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYzNmIyNGFjMDgxMmZkM2I1ZjQ2NWYyNSJ9.NcfOV372emwmCCPuoQ1HRKEy7sJ1HTO70GKWoepQJP2sShdlCTCzDQr3gND3LNhwE_Naco6V1Ab_7p8aH0-0dCd_vx91kzFYbgTX7m6KcKqVNkxuwhY45VLeYl2pQ0_-mqvPLM1DcGKkSqiKZ7MGk_qrfVwZUpo4yy7wRG_foMyFSnWOHNj42ya9PGjFsxztnc24hzNKpDz6lCs6O6N_6--ue7h8_tiUwgFiV8vUr7GXtxVvDU08r3gRXtj5pNA4wDo_OsWv7YS1ZwpXf_7AdVYimqVjHtpsrLgpumL6FOyWLY8_TOsZSBKjMPGQT1URdMtoEde9Q_Z-LUqneQdx0g";
-
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjM2MzcyZDgxODZlNjUzOWVkMDU5NmMyIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNjY3OTk3OTkwLCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYzNmI2OGU2M2Y5YzFjNGQ1MjNkZWZiNyJ9.HwRomSL5l7Unk4p9v2WyyehcEIJgg5INoqR4s8h274CGK6P-jn4xx8voltraaDgq43QIzxP-f8GLUhk1ru4mCyxw8ItZ_7AtLgp-ykdNQjSBQb21V5Otyc7bKOirYbl_3QP8PjGfYWnAuVl7Yu5h66vdXQWVnPXUchBC_GxN1JaVS_vD1t6NFJQstfMfEr_MgyAm5YYH1EU4eksq4jumCR2aPpsF2ml8JiPxWcDRrDcpAZTjvjoxeeJwhyVUj2arE5v52FXTQ_34GZ4TTSmiV97Sh3pF5DdRhyJKZDEOc77TMBJOqt1HXUxnwasudkwkvyLZP7TWIIFe3D7KlMVIiA";
   // console.log(filterObject);
 
   useEffect(() => {
@@ -246,7 +245,7 @@ function Profiling() {
   function createQuery(queryObject) {
     let query = "";
 
-    if (Object.keys(queryObject).length > 0) {
+    if (Object.keys(queryObject)?.length > 0) {
       Object.keys(queryObject)?.forEach((key) => {
         if (key === "title or sku") {
           if (queryObject[key] === "") return;
@@ -269,7 +268,7 @@ function Profiling() {
     setPage(1);
     setFilterQuery(newQuery);
 
-    const tags = Object.keys(filterObject).filter((key) => {
+    const tags = Object.keys(filterObject)?.filter((key) => {
       return filterObject[key] !== "";
     });
 
@@ -389,11 +388,6 @@ function Profiling() {
                     return {
                       children: (
                         <>
-                          {/* <TextField
-                            id={filter}
-                            value={filterObject[field.filter] || ""}
-                            onChange={(e) => handleChange(e, field)}
-                          /> */}
                           <Select
                             placeholder={`Select ${title}`}
                             options={options}
@@ -550,7 +544,6 @@ function Profiling() {
               <Skeleton line={3} rounded="0%" type="line" />
             )}
           </Card>
-          ; ; ;
           {products?.length !== 0 && (
             <Card>
               <Pagination

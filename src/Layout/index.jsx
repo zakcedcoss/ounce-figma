@@ -5,9 +5,9 @@ import { BiUser } from "react-icons/bi";
 import { BsHouseDoor } from "react-icons/bs";
 import { CgTemplate } from "react-icons/cg";
 import { FaRegHandshake } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
-function Layout({ children }) {
+function Layout() {
   const navigate = useNavigate();
 
   return (
@@ -44,35 +44,35 @@ function Layout({ children }) {
             content: "Dashboard",
             icon: <BsHouseDoor />,
             id: "dashboard",
-            path: "/dashboard",
+            path: "/panel/dashboard",
           },
           {
             content: "Product Listing",
             icon: <FiBox />,
             id: "profiling",
-            path: "/profiling",
+            path: "/panel/profiling",
           },
           {
             content: "Templates",
             icon: <CgTemplate />,
             id: "products",
-            path: "/templates",
+            path: "/panel/templates",
           },
           {
             content: "Settings",
             icon: <AiOutlineSetting />,
             id: "products",
-            path: "/settings",
+            path: "/panel/settings",
           },
           {
             content: "Help",
             icon: <FaRegHandshake />,
             id: "products",
-            path: "/help",
+            path: "/panel/help",
           },
         ]}
       />
-      {children}
+      <Outlet />
     </div>
   );
 }
