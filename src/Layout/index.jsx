@@ -6,6 +6,14 @@ import { BsHouseDoor } from "react-icons/bs";
 import { CgTemplate } from "react-icons/cg";
 import { FaRegHandshake } from "react-icons/fa";
 import { Outlet, useNavigate } from "react-router-dom";
+import {
+  BellOutlined,
+  DownOutlined,
+  HomeTwoTone,
+  QuestionCircleTwoTone,
+  SettingTwoTone,
+  UserOutlined,
+} from "@ant-design/icons";
 
 function Layout() {
   const navigate = useNavigate();
@@ -17,32 +25,32 @@ function Layout() {
           <FlexLayout spacing="tight">
             <Button
               iconAlign="right"
-              icon={<AiOutlineDown />}
+              icon={<DownOutlined />}
               type="Outlined"
               content="Shopify"
             />
 
-            <Button iconAlign="left" icon={<FiBell />} type="Outlined" />
-            <Button iconAlign="left" icon={<BiUser />} type="Outlined" />
+            <Button iconAlign="left" icon={<BellOutlined />} type="Outlined" />
+            <Button iconAlign="left" icon={<UserOutlined />} type="Outlined" />
           </FlexLayout>
         }
       />
       <NewSidebar
-        // logo={
-        //   <img
-        //     alt="CedCommerce"
-        //     src="https://d3vlhkqyz4y38a.cloudfront.net/skin/frontend/cedcomnew/default/images/header/logo/ced-logo-web.svg"
-        //     title="CedCommerce"
-        //     width={150}
-        //   />
-        // }
+        logo={
+          <img
+            alt="CedCommerce"
+            src="https://d3vlhkqyz4y38a.cloudfront.net/skin/frontend/cedcomnew/default/images/header/logo/ced-logo-web.svg"
+            title="CedCommerce"
+            width={150}
+          />
+        }
         onChange={(e) => {
           navigate(e.path);
         }}
         menu={[
           {
             content: "Dashboard",
-            icon: <BsHouseDoor />,
+            icon: <HomeTwoTone />,
             id: "dashboard",
             path: "/panel/dashboard",
           },
@@ -60,13 +68,13 @@ function Layout() {
           },
           {
             content: "Settings",
-            icon: <AiOutlineSetting />,
+            icon: <SettingTwoTone />,
             id: "products",
             path: "/panel/settings",
           },
           {
             content: "Help",
-            icon: <FaRegHandshake />,
+            icon: <QuestionCircleTwoTone />,
             id: "products",
             path: "/panel/help",
           },

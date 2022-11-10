@@ -15,9 +15,10 @@ import {
   Pagination,
   Select,
 } from "@cedcommerce/ounce-ui";
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { FiFilter } from "react-icons/fi";
 import { useState, useEffect } from "react";
-import { Table, Avatar } from "antd";
+import { Table, Avatar, Switch } from "antd";
 
 function Profiling() {
   const [page, setPage] = useState(1);
@@ -128,7 +129,7 @@ function Profiling() {
   ];
   // token
   const TOKEN =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjM2MzcyZDgxODZlNjUzOWVkMDU5NmMyIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNjY3OTk3OTkwLCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYzNmI2OGU2M2Y5YzFjNGQ1MjNkZWZiNyJ9.HwRomSL5l7Unk4p9v2WyyehcEIJgg5INoqR4s8h274CGK6P-jn4xx8voltraaDgq43QIzxP-f8GLUhk1ru4mCyxw8ItZ_7AtLgp-ykdNQjSBQb21V5Otyc7bKOirYbl_3QP8PjGfYWnAuVl7Yu5h66vdXQWVnPXUchBC_GxN1JaVS_vD1t6NFJQstfMfEr_MgyAm5YYH1EU4eksq4jumCR2aPpsF2ml8JiPxWcDRrDcpAZTjvjoxeeJwhyVUj2arE5v52FXTQ_34GZ4TTSmiV97Sh3pF5DdRhyJKZDEOc77TMBJOqt1HXUxnwasudkwkvyLZP7TWIIFe3D7KlMVIiA";
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjM2MzcyZDgxODZlNjUzOWVkMDU5NmMyIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNjY4MDcyNTY2LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYzNmM4YzM2ZWI4ZTU4MmVlMjVmMzY2YiJ9.eMTrzGkunyVzJMO-w-RpEC57k016AKqphqesOQvXWymv7xMxxoEeSM2YPqInb5GW1iW7_NmKV9ggR8sCOV9NoMVJW371rG-xGItGOaGzn81OJzC-av8DyCBEZ34hRRULkVx9JlCwSG1eJjgu1BiqhE3JzwePhGaDhZos81RkvayzwxA0pCRa60tbOcFg77eNHOKdPTjW3w6lsq2LPuV-PiKfqvIaObZ0hJxY1maiWiN8uSARFzdjSWo3Zo5H_zwV0D_duFHS1E76voYaYOAGeaKN5pKcMFBJXwJ11UKKTysLw44x8CfW--Y1mf10V011Vc0ufldOEdo3svD89vJj1w";
 
   useEffect(() => {
     // we can keep the token in env variable for more security
@@ -150,7 +151,7 @@ function Profiling() {
     )
       .then((resp) => resp.json())
       .then((allData) => {
-        console.log(allData);
+        // console.log(allData);
         let newData = allData?.data?.rows?.map((item) => {
           return {
             key: item._id["$oid"],
@@ -162,7 +163,7 @@ function Profiling() {
             status: item.items[0]?.status || item.items[1]?.status,
             inventory:
               item.type === "simple"
-                ? item.items[0].quantity
+                ? `${item.items[0].quantity} in stock`
                 : `${item.items.reduce((acc, val) => {
                     if (item["source_product_id"] === val["source_product_id"])
                       return acc + 0;
@@ -188,8 +189,6 @@ function Profiling() {
     }
     setSelectedRow([]);
   }, [page, count, filterQuery]);
-
-  console.log(products);
 
   useEffect(() => {
     fetch(
@@ -495,6 +494,26 @@ function Profiling() {
                     title: "Inventory",
                     width: 200,
                   },
+                  {
+                    align: "left",
+                    dataIndex: "offerprime",
+                    key: "offerprime",
+                    title: "Offer Prime",
+                    width: 200,
+                    render: (_, record) => {
+                      // console.log(record);
+                      return (
+                        <FlexLayout halign="left" spacing="loose">
+                          <Switch
+                            checkedChildren={<CheckOutlined />}
+                            unCheckedChildren={<CloseOutlined />}
+                            onChange={(e) => console.log(e, record.key)}
+                          />
+                          <TextStyles>{record.inventory}</TextStyles>
+                        </FlexLayout>
+                      );
+                    },
+                  },
                 ]}
                 dataSource={products}
                 pagination={false}
@@ -561,8 +580,8 @@ function Profiling() {
                     value: "100",
                   },
                 ]}
-                totalPages={Math.ceil(totalCount / count)}
-                totalitem={totalCount}
+                totalPages={Math.ceil(totalCount / count) || 1}
+                totalitem={totalCount || 0}
               />
             </Card>
           )}
