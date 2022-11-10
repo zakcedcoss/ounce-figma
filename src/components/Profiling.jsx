@@ -168,7 +168,7 @@ function Profiling() {
                     if (item["source_product_id"] === val["source_product_id"])
                       return acc + 0;
                     return acc + val.quantity;
-                  }, 0)} in ${item.items.reduce((acc, val) => {
+                  }, 0)} of ${item.items.reduce((acc, val) => {
                     if (item["source_product_id"] === val["source_product_id"])
                       return acc + 0;
                     return acc + 1;
@@ -499,11 +499,14 @@ function Profiling() {
                     dataIndex: "offerprime",
                     key: "offerprime",
                     title: "Offer Prime",
-                    width: 200,
+                    width: 150,
                     render: (_, record) => {
-                      // console.log(record);
                       return (
-                        <FlexLayout halign="left" spacing="loose">
+                        <FlexLayout
+                          direction="column"
+                          halign="left"
+                          spacing="loose"
+                        >
                           <Switch
                             checkedChildren={<CheckOutlined />}
                             unCheckedChildren={<CloseOutlined />}
