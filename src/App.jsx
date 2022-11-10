@@ -1,6 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import Profiling from "./components/Profiling";
+import Profiling from "./components/Profiling/Profiling";
 import Dashboard from "./components/Dashboard";
 import Home from "./pages/Home";
 import Layout from "./Layout";
