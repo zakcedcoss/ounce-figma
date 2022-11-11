@@ -15,6 +15,8 @@ function ProductTable({
   filterQuery,
   selectedRow,
   setSelectedRow,
+  selectedRowArray,
+  setSelectedRowArray,
 }) {
   const [count, setCount] = useState(10);
   const [totalCount, setTotalCount] = useState(1);
@@ -96,6 +98,16 @@ function ProductTable({
       .catch((err) => console.log(err));
   }, []);
 
+  useEffect(() => {
+    console.log(selectedRow);
+    const newSelectedRowArray = Object.keys(selectedRow).reduce((acc, row) => {
+      return [...acc, ...selectedRow[row]];
+    }, []);
+
+    console.log(newSelectedRowArray);
+    setSelectedRowArray(newSelectedRowArray);
+  }, [selectedRow]);
+
   return (
     <div>
       <Card>
@@ -165,7 +177,7 @@ function ProductTable({
             dataSource={products}
             pagination={false}
             rowSelection={{
-              selectedRowKeys: selectedRow[page],
+              selectedRowKeys: selectedRowArray,
               onChange: (e) => {
                 setSelectedRow((prevSelectedRow) => {
                   return { ...prevSelectedRow, [page]: e };
@@ -185,7 +197,6 @@ function ProductTable({
             onCountChange={(e) => {
               setCount(e);
               setPage(1);
-              sessionStorage.removeItem("checkBox");
             }}
             onEnter={(e) => {
               if (e > 0) setPage(e);

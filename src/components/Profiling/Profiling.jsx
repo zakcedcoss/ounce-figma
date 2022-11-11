@@ -20,7 +20,7 @@ import ProductTable from "./ProductTable";
 function Profiling() {
   const [page, setPage] = useState(1);
   const [selectedRow, setSelectedRow] = useState({});
-
+  const [selectedRowArray, setSelectedRowArray] = useState([]);
   // filters
   const [filterObject, setFilterObject] = useState({});
   const [filterQuery, setFilterQuery] = useState("");
@@ -371,6 +371,8 @@ function Profiling() {
             filterQuery={filterQuery}
             selectedRow={selectedRow}
             setSelectedRow={setSelectedRow}
+            selectedRowArray={selectedRowArray}
+            setSelectedRowArray={setSelectedRowArray}
           />
         </div>
         <PageFooter>
