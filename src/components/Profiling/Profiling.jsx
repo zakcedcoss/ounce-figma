@@ -19,7 +19,7 @@ import ProductTable from "./ProductTable";
 
 function Profiling() {
   const [page, setPage] = useState(1);
-  const [selectedRow, setSelectedRow] = useState([]);
+  const [selectedRow, setSelectedRow] = useState({});
 
   // filters
   const [filterObject, setFilterObject] = useState({});

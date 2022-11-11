@@ -165,10 +165,11 @@ function ProductTable({
             dataSource={products}
             pagination={false}
             rowSelection={{
-              selectedRowKeys: selectedRow,
+              selectedRowKeys: selectedRow[page],
               onChange: (e) => {
-                console.log(e, selectedRow);
-                // setSelectedRow();
+                setSelectedRow((prevSelectedRow) => {
+                  return { ...prevSelectedRow, [page]: e };
+                });
               },
             }}
           />
