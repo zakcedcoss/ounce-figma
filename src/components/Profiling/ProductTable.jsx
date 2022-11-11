@@ -22,7 +22,7 @@ function ProductTable({
   const [isLoading, setIsLoading] = useState(false);
   // token
   const TOKEN =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjM2MzcyZDgxODZlNjUzOWVkMDU5NmMyIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNjY4MDcyNTY2LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYzNmM4YzM2ZWI4ZTU4MmVlMjVmMzY2YiJ9.eMTrzGkunyVzJMO-w-RpEC57k016AKqphqesOQvXWymv7xMxxoEeSM2YPqInb5GW1iW7_NmKV9ggR8sCOV9NoMVJW371rG-xGItGOaGzn81OJzC-av8DyCBEZ34hRRULkVx9JlCwSG1eJjgu1BiqhE3JzwePhGaDhZos81RkvayzwxA0pCRa60tbOcFg77eNHOKdPTjW3w6lsq2LPuV-PiKfqvIaObZ0hJxY1maiWiN8uSARFzdjSWo3Zo5H_zwV0D_duFHS1E76voYaYOAGeaKN5pKcMFBJXwJ11UKKTysLw44x8CfW--Y1mf10V011Vc0ufldOEdo3svD89vJj1w";
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjM2MzcyZDgxODZlNjUzOWVkMDU5NmMyIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNjY4MTYyMzY2LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYzNmRlYWZlNDlkMjY0NWUyNzEwYmEyOSJ9.traP50plaAE6kyitIxHU1sqTldDLX89RQbmVSa2o2A7lzNJrV91VEsrJgrcG5TBpeVhsADlVmECIZ-Mit30kpG_W1LS4TpB_zx05EK53frEZq2ye7hHxtAXQ4B35SEQncsJuHgOS_Z0V7BHzBY3fMZGCsfNFSuzzhGi7z4P7AUWVIBFnarsZw9qEAU7YobicGWmZwrswfTpc-5xP47yPWU-_BRCupytcm-50Pz6KsjcDEelNAYSnnn1mJ7GStYpD8bBIBV90dBF7qoxROOsFGjXVNfbVn2Z9wDbgzyIxItx6GaKalIzfW0aQCsCkj3ry4sYGDZqczX8zBWonLc4zhA";
 
   useEffect(() => {
     // we can keep the token in env variable for more security
@@ -96,8 +96,6 @@ function ProductTable({
       .catch((err) => console.log(err));
   }, []);
 
-  console.log(selectedRow);
-
   return (
     <div>
       <Card>
@@ -169,10 +167,8 @@ function ProductTable({
             rowSelection={{
               selectedRowKeys: selectedRow,
               onChange: (e) => {
-                setSelectedRow((oldSelectedRow) => {
-                  const mySet = new Set([...oldSelectedRow, ...e]);
-                  return [...mySet];
-                });
+                console.log(e, selectedRow);
+                // setSelectedRow();
               },
             }}
           />
