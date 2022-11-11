@@ -104,7 +104,6 @@ function ProductTable({
       return [...acc, ...selectedRow[row]];
     }, []);
 
-    console.log(newSelectedRowArray);
     setSelectedRowArray(newSelectedRowArray);
   }, [selectedRow]);
 
